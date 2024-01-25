@@ -73,6 +73,7 @@ userScheema.methods.genrateAccessToken = function(){
         }
     )
 }
+
 userScheema.methods.genrateRefreshToken = function(){
     return jwt.sign(
         {
