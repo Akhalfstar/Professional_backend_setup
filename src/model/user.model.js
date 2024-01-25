@@ -1,4 +1,7 @@
 import mongoose from 'mongoose'
+import jwt from "jsonwebtoken"
+import bcrypt from "bcrypt"
+
 
 const userScheema = new mongoose.Schema({
     username :{
@@ -47,5 +50,7 @@ const userScheema = new mongoose.Schema({
 
 
 } , {timestamps:true})
+
+
 
 export const User = mongoose.model("user" , userScheema)
