@@ -7,10 +7,13 @@ cloudinary.config({
   api_secret: process.env.api_secret 
 });
 
-const uploadOnCloudinary = async function (localPath){
+const uploadOnCloudinary = async (localPath)=>{
     try {
-        if(!localPath) return null
-        const res = await cloudinary.uploader(localPath , {
+        console.log(localPath)
+        if(!localPath){
+            return null
+        }
+        const res = await cloudinary.uploader.upload(localPath , {
             resource_type : "auto",
         })
         // file updloaded

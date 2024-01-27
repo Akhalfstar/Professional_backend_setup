@@ -26,27 +26,30 @@ const registerUser = asynchandler( async (req , res) => {
     ){
         throw new ApiError(400 , "All fields are reqired")
     }
-
+    console.log(email)
     // Add more validation like passsword mail 
 
     // user already exist check
 
-    if(User.findOne({
+    if( await User.findOne({
         $or : [{userName} , {email}]
     })) {
         throw new ApiError(409 , "user already exist")
     }
 
     // check for images cloudnary use
-    const avtarLocalPath = req.files?.avatar[0]?.path       //console log
-    const profilrLocalPath = re.files?.profile?.path
+    // console.log(req.files)
+    const avatarLocalPath = req.files?.avatar[0]?.path       //console log
+    const profilrLocalPath = req.files?.profile[0]?.path
+    // console.log(avatarLocalPath)
 
-    if(!avtarLocalPath) {
-        throw new ApiError(400 , "Avatar is reqired")
+    if(!avatarLocalPath) {
+        throw new ApiError(400 , "Avatar Local path is reqired")
     }
 
-    const avatar = await uploadOnCloudinary(avtarLocalPath)
+    const avatar = await uploadOnCloudinary(avatarLocalPath)
     const profile = await uploadOnCloudinary(profilrLocalPath)
+    console.log(avatar)
 
     if(!avatar) {
         throw new ApiError(400 , "Avatar is reqired")
