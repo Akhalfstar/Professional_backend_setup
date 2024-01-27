@@ -1,14 +1,13 @@
 import 'dotenv/config'
 
 import dbConnect from "./dbs/index.js";
-import express from 'express'
-
-const app = express()
+import { app } from './app.js';
 
 
 
 dbConnect()
 .then(()=>{
+    
     app.listen(process.env.PORT || 8000 , ()=>{
         console.log("server is running on port : " , process.env.PORT)
     })
