@@ -4,7 +4,7 @@ import bcrypt from "bcrypt"
 
 
 const userScheema = new mongoose.Schema({
-    username :{
+    userName :{
         type : String,
         unique : true,
         required : true,
@@ -19,7 +19,7 @@ const userScheema = new mongoose.Schema({
         lowecase : true,
         trim : true
     },
-    fullname :{
+    fullName :{
         type : String,
         required : true,
         trim : true,
@@ -30,7 +30,7 @@ const userScheema = new mongoose.Schema({
         unique : true,
         required : true,
     },
-    username :{
+    Profile :{
         type : String,
     },
     watchHistory :[
@@ -53,7 +53,7 @@ const userScheema = new mongoose.Schema({
 
 userScheema.pre("save" , async function (next){
     if(!this.isModified("password")) next()
-    this.password = bcrypt.hash(this.password , 10)
+    this.password = await bcrypt.hash(this.password , 10)
     next()
 })
 
