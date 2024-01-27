@@ -38,10 +38,8 @@ const registerUser = asynchandler( async (req , res) => {
     }
 
     // check for images cloudnary use
-    // console.log(req.files)
     const avatarLocalPath = req.files?.avatar[0]?.path       //console log
     const profilrLocalPath = req.files?.profile[0]?.path
-    // console.log(avatarLocalPath)
 
     if(!avatarLocalPath) {
         throw new ApiError(400 , "Avatar Local path is reqired")
@@ -49,7 +47,6 @@ const registerUser = asynchandler( async (req , res) => {
 
     const avatar = await uploadOnCloudinary(avatarLocalPath)
     const profile = await uploadOnCloudinary(profilrLocalPath)
-    console.log(avatar)
 
     if(!avatar) {
         throw new ApiError(400 , "Avatar is reqired")
