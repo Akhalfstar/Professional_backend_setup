@@ -63,7 +63,7 @@ const registerUser = asynchandler( async (req , res) => {
     })
 
     console.log("user is created")
-    const tempUser = User.findById(user._id).select(
+    const tempUser = await User.findById(user._id).select(
         "-password -refreshToken"
     )
 
