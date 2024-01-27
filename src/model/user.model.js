@@ -44,7 +44,6 @@ const userScheema = new mongoose.Schema({
     },
     refreshToken :{
         type : String,
-        required : true
     },
 
 

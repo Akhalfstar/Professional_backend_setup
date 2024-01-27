@@ -59,8 +59,10 @@ const registerUser = asynchandler( async (req , res) => {
         email,
         password,
         userName
+
     })
 
+    console.log("user is created")
     const tempUser = User.findById(user._id).select(
         "-password -refreshToken"
     )
