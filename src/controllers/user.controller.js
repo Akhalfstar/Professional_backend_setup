@@ -129,8 +129,32 @@ const UserSignIn = asynchandler( async(req , res ) =>{
 })
 
 const logoutUser = asynchandler( async (req , res) => {
+    const options = {
+        httpOnly : true,
+        secure : true
+    }
     // remove cookies
     // remove refresh token from user
+    // my method :- already pura user h mere paas to again nikalne ki need nhi h
+    // sir ka methord kyoki directoly mila nhi
+    await User.findByIdAndUpdate(req.user._id , {
+        $set : {
+            refreshToken : undefined
+        }
+    })
+
+    return res.status(200)
+    .clearCookie("refreshToken" ,options)
+    .clearCookie("acessToken" , options)
+    .json(
+        new ApiResponse(200 ,{} , "user logged out")
+    )
+    
 })
 
-export {registerUser}
+export {
+    registerUser,
+    UserSignIn,
+    logoutUser
+
+}
