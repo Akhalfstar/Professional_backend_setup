@@ -19,6 +19,7 @@ const registerUser = asynchandler( async (req , res) => {
 
 
     const {userName , email , fullName , password  } = req.body
+    // console.log(req.body)
     if(
         [fullName , email , userName , password ].some((field)=>
             field?.trim()===""
@@ -26,7 +27,7 @@ const registerUser = asynchandler( async (req , res) => {
     ){
         throw new ApiError(400 , "All fields are reqired")
     }
-    console.log(email)
+    // console.log(email)
     // Add more validation like passsword mail 
 
     // user already exist check
@@ -39,7 +40,11 @@ const registerUser = asynchandler( async (req , res) => {
 
     // check for images cloudnary use
     const avatarLocalPath = req.files?.avatar[0]?.path       //console log
-    const profilrLocalPath = req.files?.profile[0]?.path
+    // const profilrLocalPath = req.files?.profile[0]?.path
+    let profilrLocalPath;
+    if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+        profilrLocalPath = req.files.coverImage[0].path
+    }
 
     if(!avatarLocalPath) {
         throw new ApiError(400 , "Avatar Local path is reqired")
@@ -75,6 +80,57 @@ const registerUser = asynchandler( async (req , res) => {
         new ApiResponse(201 , tempUser ,"user is registerded")
     )
 
+})
+
+const UserSignIn = asynchandler( async(req , res ) =>{
+    //get data from frontend
+    // validation check
+    // find user if exist or not
+    // check paasword
+    // share refresh and Acess token by cookies
+
+    const {userName , email , password} = req.body
+    if( [userName , email , password].some((field) =>{
+        field?.trim === ""
+    })){
+        throw new ApiError(400 , "All fields are required ")
+    }
+
+    const user = await User.findOne({userName}).select("-password")
+    if(!user){
+        throw new ApiError(404 , "Usert not found")
+    }
+
+    const pass = await user.isPasswordCorrect(password)
+    if(!pass) {
+        throw new ApiError(401 , " Password is wrong ")
+    }
+
+    const acessToken = await user.genrateAccessToken()
+    const refreshToken = await user.genrateRefreshToken()
+
+    user.refreshToken = refreshToken
+    await user.save({validateBeforeSave: false})
+
+    const options = {
+        httpOnly : true,
+        secure : true
+    }
+
+    return req.status(200)
+    .cookie("refreshToken" , refreshToken , options )
+    .cookie("acessToken" , acessToken , options)
+    .json(
+        new ApiResponse(200 , {
+            user : user, refreshToken , acessToken
+        } , "user logged in")
+    )
+
+})
+
+const logoutUser = asynchandler( async (req , res) => {
+    // remove cookies
+    // remove refresh token from user
 })
 
 export {registerUser}
