@@ -22,4 +22,17 @@ router.route('/login').post(UserSignIn)
 
 router.route('/logout').post(verifyJWT ,  logoutUser)
 
+router.route('/upload').post(
+    upload.fields([
+        {
+            name : "videoFile",
+            maxCount : 1
+        },
+        {
+            name : "thumbnail",
+            maxCount : 1
+        }
+    ]),
+    uploadVideo)
+
 export default router

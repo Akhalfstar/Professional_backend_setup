@@ -152,6 +152,10 @@ const logoutUser = asynchandler( async (req , res) => {
     
 })
 
+const uploadVideo = asynchandler( async (req , res) => {
+    
+})
+
 export {
     registerUser,
     UserSignIn,
